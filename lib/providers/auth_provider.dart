@@ -146,6 +146,29 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Wrapper sederhana untuk halaman My Profile (edit nama & telepon saja).
+  Future<bool> updateProfile({String? namaUser, String? telpUser}) async {
+    if (profile == null) return false;
+    isLoading = true;
+    notifyListeners();
+    try {
+      await _authService.updateProfile(
+        userId: profile!.id,
+        namaUser: namaUser,
+        telpUser: telpUser,
+      );
+      profile = await _authService.getCurrentProfile();
+      isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      errorMessage = e.toString();
+      isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   String _mapError(Object e) {
     final msg = e.toString();
     if (msg.contains('Invalid login credentials')) {

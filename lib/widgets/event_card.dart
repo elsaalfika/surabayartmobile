@@ -5,7 +5,7 @@ import '../models/pameran_model.dart';
 import '../core/theme.dart';
 
 /// Card kecil untuk grid horizontal (Now Showing / Upcoming Show)
-class EventCard extends StatelessWidget {
+class EventCard extends StatefulWidget {
   final PameranModel pameran;
   final VoidCallback? onTap;
   final bool showReserveLabel;
@@ -22,96 +22,119 @@ class EventCard extends StatelessWidget {
   });
 
   @override
+  State<EventCard> createState() => _EventCardState();
+}
+
+class _EventCardState extends State<EventCard> {
+  double _scale = 1.0;
+
+  void _setScale(double value) {
+    if (widget.onTap == null) return;
+    setState(() => _scale = value);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final dateFormat = DateFormat('d MMM yyyy');
 
     return GestureDetector(
-      onTap: onTap,
-      child: SizedBox(
-        width: 130,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: AspectRatio(
-                aspectRatio: 3 / 4,
-                child: pameran.posterUrl != null
-                    ? CachedNetworkImage(
-                        imageUrl: pameran.posterUrl!,
-                        fit: BoxFit.cover,
-                        placeholder: (_, __) => Container(color: AppColors.border),
-                        errorWidget: (_, __, ___) => Container(
-                          color: AppColors.border,
-                          child: const Icon(Icons.image_not_supported_outlined),
-                        ),
-                      )
-                    : Container(
-                        color: AppColors.border,
-                        child: const Icon(Icons.image_outlined),
-                      ),
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              pameran.namaPameran,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 13,
-                color: AppColors.textDark,
-              ),
-            ),
-            Text(
-              '${dateFormat.format(pameran.tanggalMulai)} - ${dateFormat.format(pameran.tanggalSelesai)}',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 10, color: AppColors.textMuted),
-            ),
-            const SizedBox(height: 4),
-            if (showReserveLabel)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.cardDark,
+      onTap: widget.onTap,
+      onTapDown: (_) => _setScale(0.94),
+      onTapUp: (_) => _setScale(1.0),
+      onTapCancel: () => _setScale(1.0),
+      child: AnimatedScale(
+        scale: _scale,
+        duration: const Duration(milliseconds: 120),
+        curve: Curves.easeOut,
+        child: SizedBox(
+          width: 130,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Hero(
+                tag: 'poster_${widget.pameran.idPameran}',
+                child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Text(
-                  'reserve',
-                  style: TextStyle(color: Colors.white, fontSize: 10),
-                ),
-              )
-            else
-              GestureDetector(
-                onTap: onFavoriteToggle,
-                child: Row(
-                  children: [
-                    Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      size: 14,
-                      color: isFavorite ? AppColors.danger : AppColors.textMuted,
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        pameran.namaPameran,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 10, color: AppColors.textMuted),
-                      ),
-                    ),
-                  ],
+                  child: AspectRatio(
+                    aspectRatio: 3 / 4,
+                    child: widget.pameran.posterUrl != null
+                        ? CachedNetworkImage(
+                            imageUrl: widget.pameran.posterUrl!,
+                            fit: BoxFit.cover,
+                            placeholder: (_, __) => Container(color: AppColors.border),
+                            errorWidget: (_, __, ___) => Container(
+                              color: AppColors.border,
+                              child: const Icon(Icons.image_not_supported_outlined),
+                            ),
+                          )
+                        : Container(
+                            color: AppColors.border,
+                            child: const Icon(Icons.image_outlined),
+                          ),
+                  ),
                 ),
               ),
-          ],
+              const SizedBox(height: 6),
+              Text(
+                widget.pameran.namaPameran,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                  color: AppColors.textDark,
+                ),
+              ),
+              Text(
+                '${dateFormat.format(widget.pameran.tanggalMulai)} - ${dateFormat.format(widget.pameran.tanggalSelesai)}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 10, color: AppColors.textMuted),
+              ),
+              const SizedBox(height: 4),
+              if (widget.showReserveLabel)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.cardDark,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Text(
+                    'reserve',
+                    style: TextStyle(color: Colors.white, fontSize: 10),
+                  ),
+                )
+              else
+                GestureDetector(
+                  onTap: widget.onFavoriteToggle,
+                  child: Row(
+                    children: [
+                      Icon(
+                        widget.isFavorite ? Icons.favorite : Icons.favorite_border,
+                        size: 14,
+                        color: widget.isFavorite ? AppColors.danger : AppColors.textMuted,
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          widget.pameran.namaPameran,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 10, color: AppColors.textMuted),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-/// Card besar untuk list vertikal (misalnya di My Event organizer)
+/// Card besar untuk list vertikal (misalnya di My Event organizer) — tidak berubah
 class EventCardWide extends StatelessWidget {
   final PameranModel pameran;
   final VoidCallback? onEdit;

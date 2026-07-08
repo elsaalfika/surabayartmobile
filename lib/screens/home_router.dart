@@ -4,6 +4,7 @@ import '../providers/auth_provider.dart';
 import 'login_page.dart';
 import 'organizer_dashboard_page.dart';
 import 'admin_dashboard_page.dart';
+import 'landing_page.dart';
 
 class HomeRouter extends StatelessWidget {
   const HomeRouter({super.key});
@@ -30,7 +31,7 @@ class HomeRouter extends StatelessWidget {
       case 'organizer':
         return const OrganizerDashboardPage();
       default:
-        return const Scaffold(body: Center(child: Text('Home Page belum dibuat')));
+        return const LandingPage();
     }
   }
 }

@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.of(context).popUntil((route) => route.isFirst);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(auth.errorMessage ?? 'Login gagal')),
+        SnackBar(content: Text(auth.errorMessage ?? 'Login Berhasil')),
       );
     }
   

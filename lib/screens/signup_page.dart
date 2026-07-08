@@ -57,7 +57,7 @@ class _SignupPageState extends State<SignupPage>
       Navigator.of(context).popUntil((route) => route.isFirst);
     } else {  
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(auth.errorMessage ?? 'Registrasi gagal')),
+        SnackBar(content: Text(auth.errorMessage ?? 'Registrasi sukses! Konfirmasi email anda.')),
       );
     }
   }
