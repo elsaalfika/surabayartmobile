@@ -63,9 +63,13 @@ class PameranProvider extends ChangeNotifier {
     required String lokasi,
     required DateTime tanggalMulai,
     required DateTime tanggalSelesai,
+    required String waktuMulai,
+    required String waktuSelesai,
+    required double hargaTiket,
+    required int kuota,
     String? posterUrl,
+    String? qrPembayaranUrl,
     required String idPenyelenggara,
-    required List<Map<String, dynamic>> sesiTiket, // [{nama, harga, kuota}]
   }) async {
     isLoading = true;
     notifyListeners();
@@ -76,18 +80,20 @@ class PameranProvider extends ChangeNotifier {
         lokasi: lokasi,
         tanggalMulai: tanggalMulai,
         tanggalSelesai: tanggalSelesai,
+        waktuMulai: waktuMulai,
+        waktuSelesai: waktuSelesai,
         posterUrl: posterUrl,
+        qrPembayaranUrl: qrPembayaranUrl,
         idPenyelenggara: idPenyelenggara,
       );
 
-      for (final sesi in sesiTiket) {
-        await _service.createTiket(
-          idPameran: pameran.idPameran,
-          namaTiket: sesi['nama'] as String,
-          hargaTiket: (sesi['harga'] as num).toDouble(),
-          kuota: sesi['kuota'] as int,
-        );
-      }
+      // Satu event = satu jenis tiket (sesi dihapus, pakai harga & kuota tunggal)
+      await _service.createTiket(
+        idPameran: pameran.idPameran,
+        namaTiket: namaPameran,
+        hargaTiket: hargaTiket,
+        kuota: kuota,
+      );
 
       await loadMyEvent(idPenyelenggara);
       isLoading = false;

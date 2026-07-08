@@ -101,6 +101,51 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Dipakai user (customer/organizer) untuk mengedit profil miliknya sendiri.
+  /// Berbeda dari AdminProvider.editProfile yang mengedit profil user lain.
+  Future<bool> updateOwnProfile({
+    String? namaUser,
+    String? telpUser,
+    String? namaInstansi,
+    String? nik,
+  }) async {
+    final current = profile;
+    if (current == null) return false;
+
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      await _authService.updateProfile(
+        userId: current.id,
+        namaUser: namaUser,
+        telpUser: telpUser,
+        namaInstansi: namaInstansi,
+        nik: nik,
+      );
+      profile = ProfileModel(
+        id: current.id,
+        namaUser: namaUser ?? current.namaUser,
+        emailUser: current.emailUser,
+        telpUser: telpUser ?? current.telpUser,
+        role: current.role,
+        namaInstansi: namaInstansi ?? current.namaInstansi,
+        nik: nik ?? current.nik,
+        statusAkun: current.statusAkun,
+        tanggalDaftar: current.tanggalDaftar,
+      );
+      isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      errorMessage = _mapError(e);
+      isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   String _mapError(Object e) {
     final msg = e.toString();
     if (msg.contains('Invalid login credentials')) {

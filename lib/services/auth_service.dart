@@ -12,22 +12,24 @@ class AuthService {
     String? namaInstansi,
     String? nik,
   }) async {
+    // Semua field dikirim langsung lewat metadata signUp.
+    // Trigger `handle_new_user()` di database yang akan insert
+    // seluruh field ini sekaligus ke tabel profiles (termasuk
+    // status_akun default 'pending' untuk organizer / 'aktif'
+    // untuk customer), jadi tidak perlu update terpisah setelah
+    // signUp yang rawan gagal senyap kalau session belum aktif
+    // (misal karena email confirmation).
     final response = await _client.auth.signUp(
       email: email,
       password: password,
       data: {
         'nama_user': namaUser,
         'role': role,
+        if (namaInstansi != null && namaInstansi.isNotEmpty)
+          'nama_instansi': namaInstansi,
+        if (nik != null && nik.isNotEmpty) 'nik': nik,
       },
     );
-
-    if (response.user != null && role == 'organizer') {
-      await _client.from('profiles').update({
-        'nama_instansi': namaInstansi,
-        'nik': nik,
-        'status_akun': 'pending',
-      }).eq('id', response.user!.id);
-    }
 
     return response;
   }
@@ -66,10 +68,14 @@ class AuthService {
     required String userId,
     String? namaUser,
     String? telpUser,
+    String? namaInstansi,
+    String? nik,
   }) async {
     final updates = <String, dynamic>{};
     if (namaUser != null) updates['nama_user'] = namaUser;
     if (telpUser != null) updates['telp_user'] = telpUser;
+    if (namaInstansi != null) updates['nama_instansi'] = namaInstansi;
+    if (nik != null) updates['nik'] = nik;
 
     if (updates.isNotEmpty) {
       await _client.from('profiles').update(updates).eq('id', userId);

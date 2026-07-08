@@ -9,6 +9,7 @@ import 'providers/auth_provider.dart';
 import 'providers/favorite_provider.dart';
 import 'providers/order_provider.dart';
 import 'providers/pameran_provider.dart';
+import 'providers/admin_provider.dart'; 
 
 import 'screens/home_router.dart';
 
@@ -17,7 +18,7 @@ Future<void> main() async {
 
   await Supabase.initialize(
     url: SupabaseConstants.supabaseUrl,
-    anonKey: SupabaseConstants.supabasePublishableKey, // parameter tetap bernama anonKey
+    anonKey: SupabaseConstants.supabasePublishableKey,
   );
 
   runApp(const SurabayArtApp());
@@ -42,12 +43,15 @@ class SurabayArtApp extends StatelessWidget {
         ChangeNotifierProvider<FavoriteProvider>(
           create: (_) => FavoriteProvider(),
         ),
+        ChangeNotifierProvider<AdminProvider>( 
+          create: (_) => AdminProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'SurabayArt',
         theme: AppTheme.lightTheme,
-        home: const HomeRouter(), // HomeRouter sudah handle semua status auth
+        home: const HomeRouter(),
       ),
     );
   }

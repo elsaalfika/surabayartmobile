@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/auth_background.dart';
+import 'signup_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -25,11 +26,19 @@ class _LoginPageState extends State<LoginPage> {
 
     if (!mounted) return;
     if (!success) {
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(auth.errorMessage ?? 'Login gagal')),
       );
     }
-    // Kalau berhasil, HomeRouter di main.dart otomatis arahkan sesuai role
+  
+  }
+
+  void _goToSignup() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const SignupPage()),
+    );
   }
 
   @override
@@ -108,25 +117,27 @@ class _LoginPageState extends State<LoginPage> {
                               )
                             : const Text('SIGN IN'),
                       ),
-                      const SizedBox(height: 10),
-                      const Text('or',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white54)),
-                      const SizedBox(height: 10),
-                      OutlinedButton.icon(
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          side: const BorderSide(color: Colors.white38),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "belum punya akun? ",
+                            style: TextStyle(color: Colors.white54, fontSize: 13),
                           ),
-                        ),
-                        onPressed: () {
-                          // TODO: implementasi Google Sign-In via Supabase OAuth
-                        },
-                        icon: const Icon(Icons.g_mobiledata, size: 22),
-                        label: const Text('sign in with google'),
+                          GestureDetector(
+                            onTap: _goToSignup,
+                            child: const Text(
+                              'sign up',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

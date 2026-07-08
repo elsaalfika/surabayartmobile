@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/auth_background.dart';
+import 'login_page.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -19,24 +20,19 @@ class _SignupPageState extends State<SignupPage>
   final _passwordController = TextEditingController();
   final _nikController = TextEditingController(); // organizer
   final _instansiController = TextEditingController(); // organizer
-  final _adminCodeController = TextEditingController(); // admin
 
   final _formKey = GlobalKey<FormState>();
-
-  static const _adminSecretCode = 'SURABAYART-ADMIN-2026'; // ganti sesuai kebutuhan
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   String get _selectedRole {
     switch (_tabController.index) {
       case 1:
         return 'organizer';
-      case 2:
-        return 'admin';
       default:
         return 'customer';
     }
@@ -44,14 +40,6 @@ class _SignupPageState extends State<SignupPage>
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
-
-    if (_selectedRole == 'admin' &&
-        _adminCodeController.text.trim() != _adminSecretCode) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Kode admin salah')),
-      );
-      return;
-    }
 
     final auth = context.read<AuthProvider>();
     final success = await auth.signUp(
@@ -66,10 +54,18 @@ class _SignupPageState extends State<SignupPage>
 
     if (!mounted) return;
     if (!success) {
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    } else {  
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(auth.errorMessage ?? 'Registrasi gagal')),
       );
     }
+  }
+
+  void _goToLogin() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const LoginPage()),
+    );
   }
 
   @override
@@ -107,7 +103,6 @@ class _SignupPageState extends State<SignupPage>
                     tabs: const [
                       Tab(text: 'as customer'),
                       Tab(text: 'as organizer'),
-                      Tab(text: 'as admin'),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -122,11 +117,6 @@ class _SignupPageState extends State<SignupPage>
                             const SizedBox(height: 12),
                             if (_selectedRole == 'organizer') ...[
                               _field(_nikController, 'NIK', icon: Icons.badge_outlined),
-                              const SizedBox(height: 12),
-                            ],
-                            if (_selectedRole == 'admin') ...[
-                              _field(_adminCodeController, 'admin code',
-                                  icon: Icons.vpn_key_outlined),
                               const SizedBox(height: 12),
                             ],
                             _field(_emailController, 'email',
@@ -166,25 +156,27 @@ class _SignupPageState extends State<SignupPage>
                                     )
                                   : Text('SIGN UP AS ${_selectedRole.toUpperCase()}'),
                             ),
-                            const SizedBox(height: 10),
-                            const Text('or',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.white54)),
-                            const SizedBox(height: 10),
-                            OutlinedButton.icon(
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: Colors.white,
-                                side: const BorderSide(color: Colors.white38),
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(24),
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  "sudah punya akun? ",
+                                  style: TextStyle(color: Colors.white54, fontSize: 13),
                                 ),
-                              ),
-                              onPressed: () {
-                                // TODO: Google Sign-Up via Supabase OAuth
-                              },
-                              icon: const Icon(Icons.g_mobiledata, size: 22),
-                              label: const Text('sign up with google'),
+                                GestureDetector(
+                                  onTap: _goToLogin,
+                                  child: const Text(
+                                    'sign in',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 24),
                           ],
@@ -236,7 +228,6 @@ class _SignupPageState extends State<SignupPage>
     _passwordController.dispose();
     _nikController.dispose();
     _instansiController.dispose();
-    _adminCodeController.dispose();
     super.dispose();
   }
 }

@@ -5,7 +5,10 @@ class PameranModel {
   final String lokasi;
   final DateTime tanggalMulai;
   final DateTime tanggalSelesai;
+  final String? waktuMulai; // format "HH:mm:ss"
+  final String? waktuSelesai;
   final String? posterUrl;
+  final String? qrPembayaranUrl;
   final String statusVerifikasi; // pending | disetujui | ditolak
   final DateTime? tanggalVerifikasi;
   final String idPenyelenggara;
@@ -22,7 +25,10 @@ class PameranModel {
     required this.lokasi,
     required this.tanggalMulai,
     required this.tanggalSelesai,
+    this.waktuMulai,
+    this.waktuSelesai,
     this.posterUrl,
+    this.qrPembayaranUrl,
     required this.statusVerifikasi,
     this.tanggalVerifikasi,
     required this.idPenyelenggara,
@@ -39,7 +45,10 @@ class PameranModel {
       lokasi: json['lokasi'] as String? ?? '',
       tanggalMulai: DateTime.parse(json['tanggal_mulai'].toString()),
       tanggalSelesai: DateTime.parse(json['tanggal_selesai'].toString()),
+      waktuMulai: json['waktu_mulai'] as String?,
+      waktuSelesai: json['waktu_selesai'] as String?,
       posterUrl: json['poster_url'] as String?,
+      qrPembayaranUrl: json['qr_pembayaran_url'] as String?,
       statusVerifikasi: json['status_verifikasi'] as String? ?? 'pending',
       tanggalVerifikasi: json['tanggal_verifikasi'] != null
           ? DateTime.tryParse(json['tanggal_verifikasi'].toString())
@@ -62,7 +71,10 @@ class PameranModel {
       'lokasi': lokasi,
       'tanggal_mulai': tanggalMulai.toIso8601String(),
       'tanggal_selesai': tanggalSelesai.toIso8601String(),
+      'waktu_mulai': waktuMulai,
+      'waktu_selesai': waktuSelesai,
       'poster_url': posterUrl,
+      'qr_pembayaran_url': qrPembayaranUrl,
       'id_penyelenggara': idPenyelenggara,
     };
   }
