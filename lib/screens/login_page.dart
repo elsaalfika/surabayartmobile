@@ -25,14 +25,23 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     if (!mounted) return;
+
     if (!success) {
-      Navigator.of(context).popUntil((route) => route.isFirst);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(auth.errorMessage ?? 'Email atau password salah'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(auth.errorMessage ?? 'Login Berhasil')),
+        const SnackBar(content: Text('Login Berhasil')),
       );
+      // Navigasi ke halaman utama setelah login sukses, misalnya:
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(builder: (_) => const HomePage()),
+      // );
     }
-  
   }
 
   void _goToSignup() {
