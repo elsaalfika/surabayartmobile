@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../core/theme.dart';
 import '../providers/auth_provider.dart';
 import '../providers/order_provider.dart';
 import 'payment_page.dart';
@@ -53,7 +54,7 @@ class _OrderSummaryPageState extends State<OrderSummaryPage> {
     final cart = orderProvider.cart;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1B18),
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,20 +65,20 @@ class _OrderSummaryPageState extends State<OrderSummaryPage> {
                 children: [
                   InkWell(
                     onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.arrow_back, color: Colors.white),
+                    child: const Icon(Icons.arrow_back, color: AppColors.textDark),
                   ),
                   const SizedBox(width: 12),
-                  const Icon(Icons.shopping_cart_outlined, color: Colors.white, size: 18),
+                  const Icon(Icons.shopping_cart_outlined, color: AppColors.textDark, size: 18),
                   const SizedBox(width: 6),
                   const Text('CART',
-                      style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w700)),
+                      style: TextStyle(color: AppColors.textDark, fontSize: 15, fontWeight: FontWeight.w700)),
                 ],
               ),
             ),
             Expanded(
               child: cart.isEmpty
                   ? const Center(
-                      child: Text('Keranjang kosong.', style: TextStyle(color: Colors.white54)),
+                      child: Text('Keranjang kosong.', style: TextStyle(color: AppColors.textMuted)),
                     )
                   : ListView.separated(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -88,8 +89,16 @@ class _OrderSummaryPageState extends State<OrderSummaryPage> {
                         return Container(
                           padding: const EdgeInsets.all(14),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: AppColors.background,
                             borderRadius: BorderRadius.circular(14),
+                            border: Border.all(color: AppColors.border),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
                           child: Row(
                             children: [

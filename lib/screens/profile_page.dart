@@ -38,14 +38,6 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
   }
 
-  String _getGreeting() {
-    final hour = DateTime.now().hour;
-    if (hour >= 4 && hour < 11) return 'Selamat Pagi';
-    if (hour >= 11 && hour < 15) return 'Selamat Siang';
-    if (hour >= 15 && hour < 18) return 'Selamat Sore';
-    return 'Selamat Malam';
-  }
-
   Future<void> _handleLogout() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -110,57 +102,41 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final profile = context.watch<AuthProvider>().profile;
-    final namaUser = profile?.namaUser ?? 'Pengguna';
-
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(24),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildHeaderBanner(context, namaUser),
-                  Transform.translate(
-                    offset: const Offset(0, -40),
-                    child: Center(
-                      child: CircleAvatar(
-                        radius: 40,
-                        backgroundColor: AppColors.cardDark,
-                        child: const Icon(
-                          Icons.person,
-                          color: AppColors.textLight,
-                          size: 44,
-                        ),
-                      ),
-                    ),
+            _buildHeaderBanner(context),
+            Transform.translate(
+              offset: const Offset(0, -40),
+              child: Center(
+                child: CircleAvatar(
+                  radius: 40,
+                  backgroundColor: AppColors.cardDark,
+                  child: const Icon(
+                    Icons.person,
+                    color: AppColors.textLight,
+                    size: 44,
                   ),
-                  Transform.translate(
-                    offset: const Offset(0, -24),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-                      child: _buildProfileCard(),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-            const SizedBox(height: 100), // ruang untuk BottomNav yang mengambang
+            Transform.translate(
+              offset: const Offset(0, -24),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                child: _buildProfileCard(),
+              ),
+            ),
+            const SizedBox(height: 76), // ruang untuk BottomNav yang mengambang
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHeaderBanner(BuildContext context, String namaUser) {
+  Widget _buildHeaderBanner(BuildContext context) {
     return SizedBox(
       height: 150,
       width: double.infinity,
@@ -196,19 +172,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 onPressed: _handleLogout,
                 icon: const Icon(Icons.logout, color: Colors.white, size: 20),
                 tooltip: 'Keluar',
-              ),
-            ),
-          ),
-          Positioned(
-            left: 16,
-            bottom: 14,
-            right: 16,
-            child: Text(
-              '${_getGreeting()}, $namaUser!',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
               ),
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../core/theme.dart';
 import '../providers/order_provider.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -39,7 +40,7 @@ class _PaymentPageState extends State<PaymentPage> {
         : null;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1B18),
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(

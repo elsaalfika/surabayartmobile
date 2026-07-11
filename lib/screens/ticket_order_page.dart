@@ -104,14 +104,14 @@ class _TicketOrderPageState extends State<TicketOrderPage> {
     final pameran = widget.pameran;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1B18),
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: _loading
-            ? const Center(child: CircularProgressIndicator(color: Colors.white))
+            ? const Center(child: CircularProgressIndicator(color: AppColors.textDark))
             : _tiket == null
                 ? const Center(
                     child: Text('Tiket untuk event ini belum tersedia.',
-                        style: TextStyle(color: Colors.white70)),
+                        style: TextStyle(color: AppColors.textMuted)),
                   )
                 : SingleChildScrollView(
                     padding: const EdgeInsets.all(16),
@@ -122,11 +122,11 @@ class _TicketOrderPageState extends State<TicketOrderPage> {
                           children: [
                             InkWell(
                               onTap: () => Navigator.pop(context),
-                              child: const Icon(Icons.arrow_back, color: Colors.white),
+                              child: const Icon(Icons.arrow_back, color: AppColors.textDark),
                             ),
                             const SizedBox(width: 12),
                             const Text('Selamat Datang!',
-                                style: TextStyle(color: Colors.white70, fontSize: 13)),
+                                style: TextStyle(color: AppColors.textMuted, fontSize: 13)),
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -145,40 +145,48 @@ class _TicketOrderPageState extends State<TicketOrderPage> {
                         const SizedBox(height: 16),
                         Text(pameran.namaPameran,
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700)),
+                                color: AppColors.textDark, fontSize: 18, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            const Icon(Icons.location_on_outlined, size: 14, color: Colors.white54),
+                            const Icon(Icons.location_on_outlined, size: 14, color: AppColors.textMuted),
                             const SizedBox(width: 4),
                             Expanded(
                               child: Text(pameran.lokasi,
-                                  style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                                  style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
                             ),
                           ],
                         ),
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            const Icon(Icons.calendar_today_outlined, size: 14, color: Colors.white54),
+                            const Icon(Icons.calendar_today_outlined, size: 14, color: AppColors.textMuted),
                             const SizedBox(width: 4),
                             Text(
                               '${_formatDate(pameran.tanggalMulai)} - ${_formatDate(pameran.tanggalSelesai)}',
-                              style: const TextStyle(color: Colors.white54, fontSize: 12),
+                              style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
                             ),
                           ],
                         ),
                         const SizedBox(height: 16),
                         Text(
                           pameran.deskripsi ?? 'Tidak ada deskripsi.',
-                          style: const TextStyle(color: Colors.white70, fontSize: 13, height: 1.5),
+                          style: const TextStyle(color: AppColors.textMuted, fontSize: 13, height: 1.5),
                         ),
                         const SizedBox(height: 20),
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: AppColors.background,
                             borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: AppColors.border),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

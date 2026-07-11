@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../core/theme.dart';
 import '../models/pameran_model.dart';
 import '../models/tiket_model.dart';
 import '../providers/auth_provider.dart';
@@ -64,7 +65,7 @@ class _ListPengunjungPageState extends State<ListPengunjungPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1B18),
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -75,18 +76,18 @@ class _ListPengunjungPageState extends State<ListPengunjungPage> {
                 children: [
                   InkWell(
                     onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.arrow_back, color: Colors.white),
+                    child: const Icon(Icons.arrow_back, color: AppColors.textDark),
                   ),
                   const SizedBox(width: 12),
                   const Text('List Pengunjung',
-                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700)),
+                      style: TextStyle(color: AppColors.textDark, fontSize: 16, fontWeight: FontWeight.w700)),
                 ],
               ),
               const SizedBox(height: 20),
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2A2521),
+                  color: AppColors.cardDark,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -115,7 +116,7 @@ class _ListPengunjungPageState extends State<ListPengunjungPage> {
               ),
               const SizedBox(height: 20),
               const Text('Isi nama pengunjung untuk setiap tiket:',
-                  style: TextStyle(color: Colors.white70, fontSize: 12)),
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
               const SizedBox(height: 12),
               Expanded(
                 child: Form(
@@ -126,14 +127,14 @@ class _ListPengunjungPageState extends State<ListPengunjungPage> {
                     itemBuilder: (context, index) {
                       return TextFormField(
                         controller: _controllers[index],
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: AppColors.textDark),
                         validator: (v) =>
                             (v == null || v.trim().isEmpty) ? 'Wajib diisi' : null,
                         decoration: InputDecoration(
                           hintText: 'Nama pengunjung ${index + 1}',
-                          hintStyle: const TextStyle(color: Colors.white38),
+                          hintStyle: const TextStyle(color: AppColors.textMuted),
                           filled: true,
-                          fillColor: Colors.white.withOpacity(0.08),
+                          fillColor: AppColors.inputFill,
                           contentPadding:
                               const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                           border: OutlineInputBorder(

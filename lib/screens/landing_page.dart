@@ -41,7 +41,7 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1B18),
+      backgroundColor: AppColors.background,
       body: Stack(
         children: [
           IndexedStack(
@@ -197,62 +197,35 @@ class _HomeTabState extends State<_HomeTab> {
         onRefresh: widget.onRefresh,
         child: CustomScrollView(
           slivers: [
+            SliverToBoxAdapter(child: _buildBanner(auth)),
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                child: Text(
-                  'HOME',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.5),
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 1.5,
-                  ),
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                clipBehavior: Clip.antiAlias,
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildBanner(auth),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildSearchBar(),
-                          const SizedBox(height: 20),
-                          const Text('NOW SHOWING',
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
-                          const SizedBox(height: 12),
-                          _buildHorizontalList(
-                            items: nowShowing,
-                            emptyText: 'Belum ada pergelaran yang sedang berlangsung.',
-                            isReservable: true,
-                            favoriteProvider: favoriteProvider,
-                            auth: auth,
-                          ),
-                          const SizedBox(height: 24),
-                          const Text('UPCOMING SHOW',
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
-                          const SizedBox(height: 12),
-                          _buildHorizontalList(
-                            items: upcoming,
-                            emptyText: 'Belum ada pergelaran mendatang.',
-                            isReservable: false,
-                            favoriteProvider: favoriteProvider,
-                            auth: auth,
-                          ),
-                        ],
-                      ),
+                    _buildSearchBar(),
+                    const SizedBox(height: 20),
+                    const Text('NOW SHOWING',
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                    const SizedBox(height: 12),
+                    _buildHorizontalList(
+                      items: nowShowing,
+                      emptyText: 'Belum ada pergelaran yang sedang berlangsung.',
+                      isReservable: true,
+                      favoriteProvider: favoriteProvider,
+                      auth: auth,
+                    ),
+                    const SizedBox(height: 24),
+                    const Text('UPCOMING SHOW',
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                    const SizedBox(height: 12),
+                    _buildHorizontalList(
+                      items: upcoming,
+                      emptyText: 'Belum ada pergelaran mendatang.',
+                      isReservable: false,
+                      favoriteProvider: favoriteProvider,
+                      auth: auth,
                     ),
                   ],
                 ),
